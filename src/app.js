@@ -1,27 +1,27 @@
-import dotenv from 'dotenv';
+// src/app.js
 import express from 'express';
-import userRoutes from 'routes/userRoutes.js';
-import githubRoutes from 'routes/githubRoutes.js';
-import dropboxRoutes from 'routes/dropboxRoutes.js';
-import todoistRoutes from 'routes/todoistROutes.js';
+import dotenv from 'dotenv';
+import userRoutes from './routes/userRoutes.js';
+import githubRoutes from './routes/githubRoutes.js';
+import errorHandler from './middlewares/errorHandler.js';
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.port || 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// App Routes
+// Routes
 app.use('/api/users', userRoutes);
 app.use('/api/github', githubRoutes);
-app.use('/api/dropbox', dropboxRoutes);
-app.use('/api/todoist', todoistRoutes);
 
-// Middleware for handeling errors
-app.use(errorHandeler);
+// Error handling middleware
+app.use(errorHandler);
 
-app.listen(PORT, ()=>{
-    console.log(`Running on port`, PORT);
-})
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+export default app;
