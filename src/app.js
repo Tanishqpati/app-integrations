@@ -1,7 +1,7 @@
 // src/app.js
 import express from 'express';
 import dotenv from 'dotenv';
-import userRoutes from './routes/userRoutes.js';
+// import userRoutes from './routes/userRoutes.js';
 import githubRoutes from './routes/githubRoutes.js';
 import errorHandler from './middlewares/errorHandler.js';
 
@@ -14,7 +14,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/users', userRoutes);
+app.use((req, res, next) => {
+  const currentTime = new Date().toLocaleTimeString();
+  console.log(`[${currentTime}] ${req.method} ${req.url}`);
+  next();
+});
+// app.use('/api/users', userRoutes);
 app.use('/api/github', githubRoutes);
 
 // Error handling middleware
