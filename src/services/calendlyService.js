@@ -26,7 +26,25 @@ class CalendlyService {
     }
   }
 
-  
+  async listOrganizationMembers() {
+    try {
+      this.setAuthorizationToken();
+      const response = await this.apiClient.get('/organization_memberships');
+      return response.data;
+    } catch (error) {
+      throw new Error(`Failed to list organization members: ${error.response ? error.response.data.message : error.message}`);
+    }
+  }
+
+  async removeUserFromOrg(uuid) {
+    try {
+      this.setAuthorizationToken();
+      const response = await this.apiClient.delete(`/organization_memberships/${uuid}`);
+      return { message: `User with UUID ${uuid} removed from organization`, data: response.data };
+    } catch (error) {
+      throw new Error(`Failed to remove user: ${error.response ? error.response.data.message : error.message}`);
+    }
+  }
 }
 
 export default new CalendlyService();
