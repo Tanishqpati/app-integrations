@@ -10,6 +10,25 @@ class CalendlyController {
       next(error);
     }
   }
+
+  async listUsers(req, res, next) {
+    try {
+      const users = await calendlyService.listOrganizationMembers();
+      res.status(200).json(users);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async removeUser(req, res, next) {
+    try {
+      const { uuid } = req.params;
+      const result = await calendlyService.removeUserFromOrg(uuid);
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default new CalendlyController();
