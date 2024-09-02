@@ -3,6 +3,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 // import userRoutes from './routes/userRoutes.js';
 import githubRoutes from './routes/githubRoutes.js';
+import calendlyRoutes from './routes/calendlyRoutes.js';
 import errorHandler from './middlewares/errorHandler.js';
 
 dotenv.config();
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 });
 // app.use('/api/users', userRoutes);
 app.use('/api/github', githubRoutes);
+app.use('/api/calendly', calendlyRoutes);
 
 // Error handling middleware
 app.use(errorHandler);
