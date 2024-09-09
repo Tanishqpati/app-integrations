@@ -1,22 +1,24 @@
+// src/controllers/calendlyController.js
 import calendlyService from '../services/calendlyService.js';
+import BaseController from './baseController.js';
 
-class CalendlyController {
+class CalendlyController extends BaseController {
   async inviteUser(req, res, next) {
     try {
       const { email } = req.body;
       const result = await calendlyService.inviteUserToOrg(email);
-      res.status(200).json(result);
+      this.sendResponse(res, 200, result);
     } catch (error) {
-      next(error);
+      this.handleError(next, error);
     }
   }
 
   async listUsers(req, res, next) {
     try {
       const users = await calendlyService.listOrganizationMembers();
-      res.status(200).json(users);
+      this.sendResponse(res, 200, users);
     } catch (error) {
-      next(error);
+      this.handleError(next, error);
     }
   }
 
@@ -24,9 +26,9 @@ class CalendlyController {
     try {
       const { uuid } = req.params;
       const result = await calendlyService.removeUserFromOrg(uuid);
-      res.status(200).json(result);
+      this.sendResponse(res, 200, result);
     } catch (error) {
-      next(error);
+      this.handleError(next, error);
     }
   }
 }

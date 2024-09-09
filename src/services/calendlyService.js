@@ -1,28 +1,20 @@
-import axios from 'axios';
+// src/services/calendlyService.js
+import CloudService from './cloudService.js';
 
-class CalendlyService {
+class CalendlyService extends CloudService {
   constructor() {
-    this.apiClient = axios.create({
-      baseURL: 'https://api.calendly.com',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-  }
-
-  setAuthorizationToken() {
-    this.apiClient.defaults.headers['Authorization'] = `Bearer ${process.env.CALENDLY_TOKEN}`;
+    super('https://api.calendly.com', 'CALENDLY_TOKEN');
   }
 
   async inviteUserToOrg(email) {
     try {
       this.setAuthorizationToken();
       const response = await this.apiClient.post(`/organizations/${process.env.CALENDLY_ORG_ID}/invitations`, {
-        email
+        email,
       });
       return response.data;
     } catch (error) {
-      throw new Error(`Failed to invite user: ${error.response ? error.response.data.message : error.message}`);
+      this.handleApiError(error);
     }
   }
 
@@ -32,7 +24,7 @@ class CalendlyService {
       const response = await this.apiClient.get('/organization_memberships');
       return response.data;
     } catch (error) {
-      throw new Error(`Failed to list organization members: ${error.response ? error.response.data.message : error.message}`);
+      this.handleApiError(error);
     }
   }
 
@@ -42,7 +34,7 @@ class CalendlyService {
       const response = await this.apiClient.delete(`/organization_memberships/${uuid}`);
       return { message: `User with UUID ${uuid} removed from organization`, data: response.data };
     } catch (error) {
-      throw new Error(`Failed to remove user: ${error.response ? error.response.data.message : error.message}`);
+      this.handleApiError(error);
     }
   }
 }
